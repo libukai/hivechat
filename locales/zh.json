@@ -94,7 +94,7 @@
     "notExist": "该智能体不存在，或已经被删除",
     "source": "来源",
     "chat": "对话",
-    "addToChats": "添加到对话",
+    "addToChats": "添加到我的智能体",
     "remove": "移除",
     "prompt": "角色设定（Prompt）",
     "noPrompt": "该智能体没有提示词",

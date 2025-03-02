@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { Button, message, Modal } from "antd";
 import useChatListStore from '@/app/store/chatList';
-import { deleteAllMessages } from '@/app/chat/settings/actions';
+import { deleteAllUserChatInServer } from '@/app/chat/actions/chat';
 import { useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
 import { Alert } from 'antd';
@@ -11,12 +11,14 @@ const SystemSettingsPage = () => {
   const t = useTranslations('Settings');
   const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
+  const { setChatList } = useChatListStore();
 
   const handleDeleteAllMessages = async () => {
     if (confirm(t('deleteAllMessagesConfirm'))) {
       setLoading(true);
-      const result = await deleteAllMessages();
-      if (result.success) {
+      const result = await deleteAllUserChatInServer();
+      if (result.status === 'success') {
+        setChatList([]);
         message.success(t('deleteSuccess'));
       } else {
         message.error(result.message || t('deleteFailed'));

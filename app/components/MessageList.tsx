@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Button, Input, Tooltip, Modal, Popover, Skeleton, message, Image as AntdImage } from "antd";
-import { PictureOutlined, ClearOutlined, FieldTimeOutlined, ArrowUpOutlined } from '@ant-design/icons';
+import { PictureOutlined, ClearOutlined, FieldTimeOutlined, ArrowUpOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
 import { Square } from '@icon-park/react';
 import Eraser from '@/app/images/eraser.svg'
 import CloseIcon from '@/app/images/close.svg'
@@ -54,6 +54,8 @@ export const MessageList = (props: { chat_id: string }) => {
   const isFromHome = useRouteState();
   const router = useRouter();
   const shouldSetNewTitleRef = useRef(shouldSetNewTitle);
+  const [promptExpanded, setPromptExpanded] = useState(false);
+
   useEffect(() => {
     const check = async () => {
       if (isFromHome) {
@@ -134,13 +136,22 @@ export const MessageList = (props: { chat_id: string }) => {
       <div onScroll={throttledHandleScroll} ref={messageListRef} className='flex w-full flex-col h-0 px-4 grow py-6 relative overflow-y-auto leading-7 chat-list text-sm'>
         {!isPending && chat?.prompt && <div className="flex container mx-auto max-w-screen-md mb-4 w-full flex-col justify-center items-center">
           <div className='flex max-w-3xl text-justify w-full my-0 pt-0 pb-1 flex-col pr-4 pl-4'>
-            <div className='flex flex-row items-center mb-2'>
+            <div 
+              className='flex flex-row items-center mb-2 cursor-pointer' 
+              onClick={() => setPromptExpanded(!promptExpanded)}
+            >
               <span className='text-2xl leading-8'>✨</span>
               <span className='text-sm leading-8 ml-1 font-medium'>{t('prompt')}</span>
+              {promptExpanded ? 
+                <UpOutlined className="ml-2" /> : 
+                <DownOutlined className="ml-2" />
+              }
             </div>
-            <div className='w-fit p-6 markdown-body !min-w-4 !bg-gray-100 text-base rounded-xl ml-10'>
-              <MarkdownRender content={chat.prompt} />
-            </div>
+            {promptExpanded && (
+              <div className='w-fit p-6 markdown-body !min-w-4 !bg-gray-100 text-base rounded-xl ml-10'>
+                <MarkdownRender content={chat.prompt} />
+              </div>
+            )}
           </div>
         </div>}
         {isPending ?

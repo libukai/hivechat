@@ -1,45 +1,48 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, message, Modal } from "antd";
 import useChatListStore from '@/app/store/chatList';
-import { deleteAllUserChatInServer } from '@/app/chat/actions/chat';
+import { deleteAllMessages } from '@/app/chat/settings/actions';
 import { useTranslations } from 'next-intl';
+import { useSession } from 'next-auth/react';
+import { Alert } from 'antd';
 
-const System = () => {
-  const c = useTranslations('Common');
+const SystemSettingsPage = () => {
   const t = useTranslations('Settings');
-  const [modal, contextHolderModal] = Modal.useModal();
-  const { setChatList } = useChatListStore();
+  const { data: session } = useSession();
+  const [loading, setLoading] = useState(false);
 
-  const clearAllChats = () => {
-    modal.confirm({
-      title: t('deleteAllMessagesTitle'),
-      content: t('deleteAllMessagesDesc'),
-      okText: c('confirm'),
-      cancelText: c('cancel'),
-      onOk() {
-        deleteAllUserChatInServer();
-        setChatList([]);
+  const handleDeleteAllMessages = async () => {
+    if (confirm(t('deleteAllMessagesConfirm'))) {
+      setLoading(true);
+      const result = await deleteAllMessages();
+      if (result.success) {
         message.success(t('deleteSuccess'));
+      } else {
+        message.error(result.message || t('deleteFailed'));
       }
-    });
-  }
+      setLoading(false);
+    }
+  };
 
   return (
-    <div>
-      {contextHolderModal}
-      <div className='flex flex-row justify-between mt-6 p-6 border border-gray-200 rounded-md'>
-        <div className='flex flex-col '>
-          <span className='text-sm'>{t('deleteAllMessagesTitle')}</span>
-          <span className='text-gray-400 text-xs'>{t('deleteAllMessagesDesc')}</span>
-        </div>
-        <div className='flex items-center'>
-          <Button onClick={clearAllChats}>{t('deleteAction')}</Button>
+    <div className='mt-6'>
+      <div className='flex flex-col gap-4'>
+        <div className='p-4 bg-white rounded-lg shadow-sm'>
+          <h2 className='text-lg font-medium mb-2'>{t('deleteAllMessagesTitle')}</h2>
+          <p className='text-gray-500 mb-4'>{t('deleteAllMessagesDesc')}</p>
+          <Button 
+            type='primary' 
+            danger 
+            onClick={handleDeleteAllMessages}
+            loading={loading}
+          >
+            {t('deleteAction')}
+          </Button>
         </div>
       </div>
-
     </div>
-  )
-}
+  );
+};
 
-export default System
+export default SystemSettingsPage;

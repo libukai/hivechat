@@ -6,12 +6,11 @@ import Link from 'next/link';
 import { adminSetup } from '../actions';
 import { fetchAppSettings } from '@/app/admin/system/actions';
 import { Form, Input, Button, Alert } from 'antd';
-import logo from "@/app/images/logo.png";
-import Hivechat from "@/app/images/hivechat.svg";
+import mulanhua from "@/app/images/mulanhua.png";
 import { useTranslations } from 'next-intl';
 
 interface SetupFormValues {
-  email: string;
+  username: string;
   password: string;
   repeatPassword: string;
   adminCode: string;
@@ -50,7 +49,7 @@ export default function SetupPage() {
       return;
     }
     try {
-      const result = await adminSetup(values.email, values.password, values.adminCode);
+      const result = await adminSetup(values.username, values.password, values.adminCode);
       if (result.status === 'success') {
         window.location.href = "/chat";
       } else {
@@ -71,8 +70,7 @@ export default function SetupPage() {
     <div className="flex flex-col min-h-screen items-center justify-center bg-slate-50">
       <div className="flex items-center flex-row my-6">
         <Link href="/" className='flex items-center'>
-          <Image src={logo} className="ml-1" alt="HiveChat logo" width={32} height={32} />
-          <Hivechat className="ml-1" alt="HiveChat text" width={156} height={39} />
+          <Image src={mulanhua} className="ml-1" alt="HiveChat logo" width={248} height={24} />
         </Link>
       </div>
       <div className="w-full max-w-sm space-y-6 rounded-lg bg-white p-6 mb-6 shadow-xl">
@@ -86,9 +84,9 @@ export default function SetupPage() {
         >
           <div className="text-sm text-gray-400 my-2">{t('setupNotice')}</div>
           <Form.Item
-            name="email"
-            label={<span className="font-medium">Email</span>}
-            rules={[{ required: true, message: t('emailNotice') }]}
+            name="username"
+            label={<span className="font-medium">{t('username')}</span>}
+            rules={[{ required: true, message: t('usernameNotice') }]}
           >
             <Input size="large" />
           </Form.Item>

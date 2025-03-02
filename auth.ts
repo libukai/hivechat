@@ -13,15 +13,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       // You can specify which fields should be submitted, by adding keys to the `credentials` object.
       // e.g. domain, username, password, 2FA token, etc.
       credentials: {
-        email: {},
+        username: {},
         password: {},
       },
       authorize: async (credentials) => {
         try {
-          const { email, password } = await signInSchema.parseAsync(credentials);
+          const { username, password } = await signInSchema.parseAsync(credentials);
           const user = await db.query.users
             .findFirst({
-              where: eq(users.email, email)
+              where: eq(users.username, username)
             })
           if (!user || !user.password) {
             return null;
@@ -31,7 +31,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             return {
               id: user.id,
               name: user.name,
-              email: user.email,
+              username: user.username,
               isAdmin: user.isAdmin || false,
             };
           } else {
@@ -50,20 +50,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    jwt: async ({ token, user }) => {
       if (user) {
         token.id = user.id;
+        token.name = user.name;
+        token.username = user.username;
         token.isAdmin = user.isAdmin;
       }
       return token;
     },
-    async session({ session, token }) {
+    session: async ({ session, token }) => {
       if (token) {
-        // session.user.isAdmin = token.isAdmin || false;
         session.user = {
-          ...session.user, // 保留已有的属性
+          ...session.user,
           id: String(token.id),
-          isAdmin: Boolean(token.isAdmin), // 添加 isAdmin
+          username: String(token.username),
+          isAdmin: Boolean(token.isAdmin),
         };
       }
       return session;

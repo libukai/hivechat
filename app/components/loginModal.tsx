@@ -5,14 +5,14 @@ import { Modal, Form, Input, Button, Alert } from 'antd';
 import { useLoginModal } from '@/app/contexts/loginModalContext';
 import { signIn } from "next-auth/react";
 import { fetchAppSettings } from '@/app/admin/system/actions';
-import logo from "@/app/images/logo.png";
+import mulanhua from "@/app/images/mulanhua.png";
 import Hivechat from "@/app/images/hivechat.svg";
 import Link from 'next/link';
 import Image from "next/image";
 import { useTranslations } from 'next-intl';
 
 interface LoginFormValues {
-  email: string;
+  username: string;
   password: string;
 }
 
@@ -39,7 +39,7 @@ export default function LoginModal() {
   async function handleSubmit(values: LoginFormValues) {
     setLoading(true);
     const response = await signIn("credentials", {
-      email: values.email,
+      username: values.username,
       password: values.password,
       redirect: false,
     });
@@ -64,9 +64,8 @@ export default function LoginModal() {
       width={420}
     >
       <div className="flex items-center justify-center flex-row mb-6 mt-4">
-        <Image src={logo} className="ml-1" alt="HiveChat logo" width={28} height={28} />
-        <Hivechat className="ml-1" alt="HiveChat text" width={120} />
-        <span className="text-center text-xl">{t('login')}</span>
+        <Image src={mulanhua} className="ml-1" alt="HiveChat logo" width={248} height={24} />
+        {/* <span className="text-center text-xl">{t('login')}</span> */}
       </div>
       <div className='px-4 pb-2'>
         {error && <Alert message={error} style={{ 'marginBottom': '1rem' }} type="error" />}
@@ -77,9 +76,9 @@ export default function LoginModal() {
           requiredMark='optional'
         >
           <Form.Item
-            name="email"
-            label={<span className="font-medium">Email</span>}
-            rules={[{ required: true, message: t('emailNotice') }]}
+            name="username"
+            label={<span className="font-medium">{t('username')}</span>}
+            rules={[{ required: true, message: t('usernameNotice') }]}
           >
             <Input size='large' />
           </Form.Item>

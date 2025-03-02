@@ -11,29 +11,34 @@ export async function getUserList() {
     throw new Error('not allowed');
   }
   try {
-    const result = await db.query.users.findMany({
-      orderBy: [desc(users.createdAt)],
+    const userList = await db.query.users.findMany({
+      orderBy: (users, { desc }) => [desc(users.createdAt)],
     });
-    return result;
+    return userList.map(user => ({
+      id: user.id,
+      username: user.username,
+      isAdmin: user.isAdmin || false,
+      createdAt: user.createdAt?.toISOString() || '',
+    }));
   } catch (error) {
-    throw new Error('query user list fail');
+    return [];
   }
 }
 
-export async function addUser(userBasicInfo: { email: string, password: string, isAdmin: boolean }) {
+export async function addUser(userBasicInfo: { username: string, password: string, isAdmin: boolean }) {
   const session = await auth();
   if (!session?.user.isAdmin) {
     throw new Error('not allowed');
   }
   try {
     const existingUser = await db.query.users.findFirst({
-      where: eq(users.email, userBasicInfo.email),
+      where: eq(users.username, userBasicInfo.username),
     });
 
     if (existingUser) {
       return {
         success: false,
-        message: '邮箱已被注册',
+        message: '用户名已被注册',
       }
     }
 
@@ -41,7 +46,7 @@ export async function addUser(userBasicInfo: { email: string, password: string, 
     const hashedPassword = await bcrypt.hash(userBasicInfo.password, salt);
 
     const result = await db.insert(users).values({
-      email: userBasicInfo.email,
+      username: userBasicInfo.username,
       password: hashedPassword,
       isAdmin: userBasicInfo.isAdmin,
     });
@@ -56,16 +61,16 @@ export async function addUser(userBasicInfo: { email: string, password: string, 
   }
 }
 
-export async function deleteUser(email: string) {
+export async function deleteUser(username: string) {
   const session = await auth();
   if (!session?.user.isAdmin) {
     throw new Error('not allowed');
   }
   try {
-    await db.delete(users).where(eq(users.email, email));
+    await db.delete(users).where(eq(users.username, username));
     return {
       success: true,
-      message: '未找到对应邮箱的用户'
+      message: '删除成功'
     }
   } catch (error) {
     return {
@@ -75,14 +80,14 @@ export async function deleteUser(email: string) {
   }
 }
 
-export async function updateUser(email: string, userBasicInfo: { email: string, password?: string, isAdmin: boolean }) {
+export async function updateUser(username: string, userBasicInfo: { username: string, password?: string, isAdmin: boolean }) {
   const session = await auth();
   if (!session?.user.isAdmin) {
     throw new Error('not allowed');
   }
   try {
     const existingUser = await db.query.users.findFirst({
-      where: eq(users.email, email),
+      where: eq(users.username, username),
     });
 
     if (!existingUser) {
@@ -95,21 +100,20 @@ export async function updateUser(email: string, userBasicInfo: { email: string, 
     if (userBasicInfo.password) {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(userBasicInfo.password, salt);
-      // 更新用户信息
       updateResult = await db.update(users)
         .set({
-          email: userBasicInfo.email,
+          username: userBasicInfo.username,
           password: hashedPassword,
           isAdmin: userBasicInfo.isAdmin,
         })
-        .where(eq(users.email, email));
+        .where(eq(users.username, username));
     } else {
       updateResult = await db.update(users)
         .set({
-          email: userBasicInfo.email,
+          username: userBasicInfo.username,
           isAdmin: userBasicInfo.isAdmin,
         })
-        .where(eq(users.email, email));
+        .where(eq(users.username, username));
     }
     return {
       success: true,

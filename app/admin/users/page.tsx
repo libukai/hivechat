@@ -66,7 +66,7 @@ const UserListPage = () => {
   };
 
   const onEditUserFinish = async (values: FormValues) => {
-    const result = await updateUser(values.email, values);
+    const result = await updateUser(values.username, values);
     if (result.success) {
       const userList = await getUserList();
       setUserList(userList);
@@ -80,15 +80,15 @@ const UserListPage = () => {
 
   const handleEditUser = async (userInfo: UserType) => {
     editForm.setFieldsValue({
-      'email': userInfo.email,
+      'username': userInfo.username,
       'isAdmin': userInfo.isAdmin,
     })
     setIsEditUserModalOpen(true);
   }
 
-  const handleDeleteUser = async (email: string) => {
+  const handleDeleteUser = async (username: string) => {
     if (confirm(t('deleteNotice'))) {
-      const result = await deleteUser(email);
+      const result = await deleteUser(username);
       if (result.success) {
         const userList = await getUserList();
         setUserList(userList);
@@ -98,6 +98,58 @@ const UserListPage = () => {
       }
     }
   }
+
+  const columns = [
+    {
+      title: t('username'),
+      dataIndex: 'username',
+      key: 'username',
+    },
+    {
+      title: t('role'),
+      dataIndex: 'isAdmin',
+      key: 'role',
+      render: (isAdmin: boolean) => (
+        <Tag color={isAdmin ? "blue" : "default"}>
+          {isAdmin ? t('roleAdmin') : t('roleUser')}
+        </Tag>
+      ),
+    },
+    {
+      title: t('registerAt'),
+      dataIndex: 'createdAt',
+      key: 'registerAt',
+      render: (createdAt: Date | null) => (
+        <span>{createdAt?.toLocaleString('sv-SE')}</span>
+      ),
+    },
+    {
+      title: t('action'),
+      key: 'action',
+      render: (text: string, record: UserType) => (
+        <>
+          <Button
+            size='small'
+            className='text-sm'
+            type='link'
+            onClick={() => {
+              handleEditUser(record)
+            }}
+          >{t('edit')}</Button>
+          <Divider type="vertical" />
+          <Button
+            size='small'
+            className='text-sm'
+            type='link'
+            onClick={() => {
+              handleDeleteUser(record.username)
+            }}
+          >{t('delete')}</Button>
+        </>
+      ),
+    },
+  ];
+
   return (
     <div className='container max-w-3xl mb-6 px-4 md:px-0 pt-4'>
       <div className='w-full mb-6 flex flex-row justify-between items-center'>
@@ -110,7 +162,7 @@ const UserListPage = () => {
             <thead>
               <tr className="bg-slate-100">
                 <th className='border-b border-r border-slate-300 p-2'>#</th>
-                <th className='border-b border-r border-slate-300 p-2'>Email</th>
+                <th className='border-b border-r border-slate-300 p-2 text-center'>{t('username')}</th>
                 <th className='border-b border-r border-slate-300 p-2'>{t('role')}</th>
                 <th className='border-b border-r border-slate-300 p-2'>{t('registerAt')}</th>
                 <th className='border-b border-slate-300 p-2 w-36'>{t('action')}</th>
@@ -120,7 +172,7 @@ const UserListPage = () => {
               {userList.map((user, index) => (
                 <tr key={user.id} className="hover:bg-slate-50">
                   <td className='border-t border-r text-center text-sm border-slate-300 p-2'>{index + 1}</td>
-                  <td className='border-t border-r text-sm border-slate-300 p-2'>{user.email}</td>
+                  <td className='border-t border-r text-sm text-center border-slate-300 p-2'>{user.username}</td>
                   <td className='border-t border-r text-sm text-center border-slate-300 p-2'>{user.isAdmin ? <Tag color="blue">{t('roleAdmin')}</Tag> : <Tag>{t('roleUser')}</Tag>}</td>
                   <td className='border-t border-r text-sm text-center w-48 border-slate-300 p-2'>{user.createdAt?.toLocaleString('sv-SE')}</td>
                   <td className='border-t text-center text-sm w-32 border-slate-300 p-2'>
@@ -138,7 +190,7 @@ const UserListPage = () => {
                       className='text-sm'
                       type='link'
                       onClick={() => {
-                        handleDeleteUser(user.email as string)
+                        handleDeleteUser(user.username)
                       }}
                     >{t('delete')}</Button>
                   </td>
@@ -162,9 +214,9 @@ const UserListPage = () => {
           onFinish={onFinish}
           validateTrigger='onBlur'
         >
-          <Form.Item label={<span className='font-medium'>Email</span>} name='email'
-            rules={[{ required: true, message: t('emailNotice') }, { type: 'email', message: t('emailNotice') }]}>
-            <Input type='email' />
+          <Form.Item label={<span className='font-medium'>{t('username')}</span>} name='username'
+            rules={[{ required: true, message: t('usernameNotice') }]}>
+            <Input />
           </Form.Item>
           <Form.Item label={<span className='font-medium'>{t('password')}</span>} name='password'
             rules={[{ required: true, message: t('passwordNotice') }, {
@@ -194,9 +246,9 @@ const UserListPage = () => {
           onFinish={onEditUserFinish}
           validateTrigger='onBlur'
         >
-          <Form.Item label={<span className='font-medium'>Email</span>} name='email'
-            rules={[{ required: true, message: t('emailNotice') }, { type: 'email', message:  t('emailNotice') }]}>
-            <Input type='email' disabled />
+          <Form.Item label={<span className='font-medium'>{t('username')}</span>} name='username'
+            rules={[{ required: true, message: t('usernameNotice') }]}>
+            <Input disabled />
           </Form.Item>
           <Form.Item label={<span className='font-medium'>{t('roleAdmin')}</span>} name='isAdmin'>
             <Switch defaultChecked={false} value={false} />

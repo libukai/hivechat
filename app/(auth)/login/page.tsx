@@ -6,12 +6,11 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from 'next/link';
 import { Form, Input, Button, Alert } from 'antd';
-import logo from "@/app/images/logo.png";
-import Hivechat from "@/app/images/hivechat.svg";
+import mulanhua from "@/app/images/mulanhua.png";
 import { useTranslations } from 'next-intl';
 
 interface LoginFormValues {
-  email: string;
+  username: string;
   password: string;
 }
 
@@ -25,7 +24,7 @@ export default function LoginPage() {
   async function handleSubmit(values: LoginFormValues) {
     setLoading(true);
     const response = await signIn("credentials", {
-      email: values.email,
+      username: values.username,
       password: values.password,
       redirect: false,
     });
@@ -40,14 +39,12 @@ export default function LoginPage() {
 
   return (
     <div className="flex flex-col min-h-screen items-center justify-center bg-slate-50">
-      <div className="flex items-center flex-row  mb-6">
+      <div className="flex items-center flex-row mb-6">
         <Link href="/" className='flex items-center'>
-          <Image src={logo} className="ml-1" alt="HiveChat logo" width={32} height={32} />
-          <Hivechat className="ml-1" alt="HiveChat text" width={156} height={39} />
+          <Image src={mulanhua} className="ml-1" alt="HiveChat logo" width={248} height={24} />
         </Link>
       </div>
       <div className="w-full max-w-md space-y-6 rounded-lg bg-white p-8 shadow-xl">
-        <h2 className="text-center text-2xl">{t('login')}</h2>
         {error && <Alert message={error} type="error" />}
         <Form
           form={form}
@@ -56,10 +53,10 @@ export default function LoginPage() {
           requiredMark='optional'
         >
           <Form.Item
-            name="email"
-            label={<span className="font-medium">Email</span>}
+            name="username"
+            label={<span className="font-medium">{t('username')}</span>}
             validateTrigger='onBlur'
-            rules={[{ required: true, type: 'email', message: t('emailNotice') }]}
+            rules={[{ required: true, message: t('usernameNotice') }]}
           >
             <Input size='large' />
           </Form.Item>
@@ -70,7 +67,7 @@ export default function LoginPage() {
           >
             <Input.Password size='large' />
           </Form.Item>
-          <Form.Item>
+          <div className="mt-6">
             <Button
               type="primary"
               htmlType="submit"
@@ -80,8 +77,8 @@ export default function LoginPage() {
             >
               {t('login')}
             </Button>
-          </Form.Item>
-          <div className='flex -mt-2'>
+          </div>
+          {/* <div className='flex mt-2'>
             <Link href='/register'>
               <Button
                 type='link'
@@ -89,7 +86,7 @@ export default function LoginPage() {
                 style={{ 'padding': '0' }}
               >{t('register')}</Button>
             </Link>
-          </div>
+          </div> */}
         </Form>
       </div>
     </div>

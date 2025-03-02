@@ -11,8 +11,8 @@ import "./globals.css";
 
 
 export const metadata: Metadata = {
-  title: "Hivechat - Chat With All AI",
-  description: "同时和多个机器人聊天，最快获取最佳结果",
+  title: "木兰花·深度求索",
+  description: "木兰花家政深度求索平台",
 };
 
 export const viewport: Viewport = {

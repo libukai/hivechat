@@ -23,12 +23,14 @@ const Settings = ({
 
   const items: MenuItem[] = [
     {
-      label: <Link href="/chat/settings/account">{t('accountSettings')}</Link>,
+      label: t('accountSettings'),
       key: 'account',
+      onClick: () => router.push('/chat/settings/account')
     },
     {
-      label: <Link href="/chat/settings/system">{t('systemSettings')}</Link>,
+      label: t('systemSettings'),
       key: 'system',
+      onClick: () => router.push('/chat/settings/system')
     },
   ];
 

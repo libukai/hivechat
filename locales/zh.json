@@ -6,7 +6,8 @@
   },
   "Auth": {
     "login": "登录",
-    "emailNotice": "请输入 Email",
+    "username": "用户名",
+    "usernameNotice": "请输入用户名",
     "password": "密码",
     "repeatPassword": "重复密码",
     "passwordNotice": "请输入密码",
@@ -114,20 +115,28 @@
     "botCount": "个智能体"
   },
   "Settings": {
-    "accountSettings": "账号设置",
-    "systemSettings": "高级设置",
+    "accountSettings": "账户设置",
+    "systemSettings": "系统设置",
+    "accountInfo": "账户信息",
+    "username": "用户名",
     "changePassword": "修改密码",
-    "logout": "退出账号",
-    "deleteAllMessagesTitle": "删除所有对话消息",
-    "deleteAllMessagesDesc": "所有对话消息都会被清空，清空后无法找回",
-    "deleteAction": "删除所有对话",
-    "deleteSuccess": "删除成功",
     "oldPassword": "旧密码",
     "newPassword": "新密码",
-    "repeatNewPassword": "重复新密码",
-    "inputPassword": "请输入密码",
-    "lengthLimit": "长度不能小于 8 个字符",
-    "language": "语言"
+    "confirmPassword": "确认密码",
+    "oldPasswordRequired": "请输入旧密码",
+    "newPasswordRequired": "请输入新密码",
+    "confirmPasswordRequired": "请确认新密码",
+    "passwordLengthLimit": "密码长度至少为8个字符",
+    "passwordsDoNotMatch": "两次输入的密码不一致",
+    "language": "语言",
+    "logout": "退出登录",
+    "deleteAllMessagesTitle": "删除所有对话",
+    "deleteAllMessagesDesc": "此操作将删除您的所有聊天记录，此操作不可恢复",
+    "deleteAction": "删除",
+    "deleteAllMessagesConfirm": "确定要删除所有对话吗？此操作不可恢复！",
+    "deleteSuccess": "删除成功",
+    "deleteFailed": "删除失败",
+    "adminOnly": "只有管理员可以访问此页面"
   },
   "Admin": {
     "models": "模型设置",
@@ -185,7 +194,8 @@
       "userList": "用户列表",
       "addUser": "添加用户",
       "role": "角色",
-      "emailNotice": "请输入邮箱",
+      "username": "用户名",
+      "usernameNotice": "请输入用户名",
       "password": "密码",
       "passwordNotice": "请输入密码",
       "lengthLimit": "长度不能小于 8 个字符",
@@ -204,7 +214,7 @@
     "System": {
       "system": "系统设置",
       "isRegistrationOpen": "开放注册",
-      "isRegistrationOpenDesc": "用户可通过邮箱自助申请账号，内部团队使用请勿开启",
+      "isRegistrationOpenDesc": "用户可通过用户名自助申请账号，内部团队使用请勿开启",
       "saveFail": "保存失败",
       "saveSuccess": "保存成功"
     }

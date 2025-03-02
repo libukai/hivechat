@@ -4,16 +4,16 @@ import { db } from '@/app/db';
 import { eq } from 'drizzle-orm';
 import { auth } from "@/auth";
 import bcrypt from "bcryptjs";
+import { messages } from '@/app/db/schema';
 
-
-export async function updatePassword(email: string, oldPassword: string, newPassword: string,) {
+export async function updatePassword(username: string, oldPassword: string, newPassword: string,) {
   const session = await auth();
-  if (session?.user.email !== email) {
+  if (session?.user.username !== username) {
     throw new Error('not allowed');
   }
   try {
     const existingUser = await db.query.users.findFirst({
-      where: eq(users.email, email),
+      where: eq(users.username, username),
     });
 
     if (!existingUser) {
@@ -38,7 +38,7 @@ export async function updatePassword(email: string, oldPassword: string, newPass
       .set({
         password: hashedPassword,
       })
-      .where(eq(users.email, email));
+      .where(eq(users.username, username));
     return {
       success: true,
       message: '已更新',
@@ -49,5 +49,31 @@ export async function updatePassword(email: string, oldPassword: string, newPass
       success: false,
       message: 'database delete error'
     }
+  }
+}
+
+export async function deleteAllMessages() {
+  const session = await auth();
+  if (!session?.user?.id) {
+    return {
+      success: false,
+      message: '未登录'
+    };
+  }
+  
+  try {
+    // 只删除当前用户的消息
+    const result = await db.delete(messages)
+      .where(eq(messages.userId, session.user.id));
+    
+    return {
+      success: true
+    };
+  } catch (error) {
+    console.error('Error deleting messages:', error);
+    return {
+      success: false,
+      message: '删除失败'
+    };
   }
 }

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { SettingOutlined, ControlOutlined, UserOutlined } from '@ant-design/icons';
 import clsx from 'clsx';
 import { usePathname } from 'next/navigation';
-import logo from "@/app/images/logo.png";
+import logo from "@/app/images/mulanhua.png";
 import HivechatText from "@/app/images/hivechat.svg";
 import ToggleSidebar from "@/app/images/hideSidebar.svg";
 import { Button } from 'antd';
@@ -28,8 +28,7 @@ export const Sidebar = () => {
     >
       <div className="flex items-center flex-row flex-grow-0 mb-2 h-10 mr-4 justify-between">
         <Link href="/" className='flex items-center'>
-          <Image src={logo} className="ml-1" alt="HiveChat logo" width={24} height={24} />
-          <HivechatText width={104} height={26} />
+          <Image src={logo} className="ml-1" alt="HiveChat logo" width={248} height={24} />
         </Link>
         <Button
           icon={<ToggleSidebar style={{ 'color': '#999', 'fontSize': '20px', 'verticalAlign': 'middle' }} />}

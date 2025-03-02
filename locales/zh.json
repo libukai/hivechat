@@ -108,7 +108,10 @@
     "modelNotConfigured": "模型未配置",
     "guideAlertText": "尚未配置大模型服务，AI 对话无法正常使用，请联系管理员进行设置",
     "thinking": "思考中...",
-    "thought": "已深度思考"
+    "thought": "已深度思考",
+    "botTag": "标签",
+    "botTagPlaceholder": "选择标签",
+    "botCount": "个智能体"
   },
   "Settings": {
     "accountSettings": "账号设置",

@@ -203,6 +203,7 @@ export const bots = pgTable("bots", {
   prompt: varchar({ length: 10000 }),
   avatarType: avatarType('avatar_type').notNull().default('none'),
   avatar: varchar('avatar'),
+  tag: text('tag').default('通用'),
   sourceUrl: varchar('source_url'),
   creator: varchar(),
   createdAt: timestamp('created_at').defaultNow(),
@@ -220,6 +221,7 @@ export interface BotType {
   sourceUrl?: string;
   creator: string;
   createdAt: Date;
+  tag: string;
 }
 
 export type UserType = typeof users.$inferSelect;

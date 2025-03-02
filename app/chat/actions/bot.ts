@@ -88,38 +88,16 @@ export const addBotToChatInServer = async (botId: number) => {
       status: 'fail',
     }
   }
-
-
-
 }
 
-export const getBotListInServer = async () => {
-  const session = await auth();
-  if (!session?.user.id) {
-    return {
-      status: 'fail',
-      message: 'please login first.'
-    }
-  }
-  const result = await db.select()
-    .from(bots)
-    .where(
-      or(
-        eq(bots.creator, session?.user.id),
-        eq(bots.creator, 'public'),
-      )
-    )
-    .orderBy(desc(bots.createdAt));
-  if (result.length > 0) {
-    return {
-      status: 'success',
-      data: result
-    }
-  } else {
-    return {
-      status: 'fail',
-      data: []
-    }
+export async function getBotListInServer() {
+  try {
+    const botsData = await db.select().from(bots).orderBy(desc(bots.id));
+    
+    return { success: true, data: botsData };
+  } catch (error) {
+    console.error('Error fetching bots:', error);
+    return { success: false, error: 'Failed to fetch bots' };
   }
 }
 
@@ -140,4 +118,31 @@ export const getBotInfoInServer = async (botId: number) => {
       status: 'fail',
     }
   }
+}
+
+export async function createBotInServer(botData: {
+  title: string;
+  desc?: string;
+  avatar: string;
+  avatarType: string;
+  prompt: string;
+  tag: string;
+}) {
+  try {
+    const newBot = await db.insert(bots).values({
+      ...botData,
+      tag: botData.tag || '通用',
+    }).returning();
+    
+    return { success: true, data: newBot[0] };
+  } catch (error) {
+    console.error('Error creating bot:', error);
+    return { success: false, error: 'Failed to create bot' };
+  }
+}
+
+export async function updateBotInServer(botId: number, botData: {
+  tag?: string;
+}) {
+  // 更新逻辑...
 }

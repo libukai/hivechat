@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react'
 import { EmojiPicker } from '@/app/components/EmojiPicker';
-import { Input, Form, message } from "antd";
+import { Input, Form, message, Select } from "antd";
 import Link from 'next/link';
 import { Button } from 'antd';
 import { useRouter } from 'next/navigation';
@@ -9,12 +9,18 @@ import { LeftOutlined } from '@ant-design/icons';
 import { addBotInServer } from '@/app/chat/actions/bot';
 import { useTranslations } from 'next-intl';
 
+const { Option } = Select;
+
 const CreateBot = () => {
   const t = useTranslations('Chat');
   const [selectedEmoji, setSelectedEmoji] = useState('🤖');
   const [isPending, setIsPending] = useState(false);
   const [form] = Form.useForm();
   const router = useRouter();
+  const [tag, setTag] = useState('通用');
+  
+  const tagOptions = ['通用', '学习', '工作', '娱乐', '生活', '其他'];
+  
   type FormValues = {
     avatar: string;
     name: string;
@@ -29,6 +35,7 @@ const CreateBot = () => {
       desc: values.desc,
       prompt: values.prompt,
       avatarType: 'emoji',
+      tag,
     });
     if (result.status === 'success') {
       router.push(`/chat/bot/${result.data?.id}`)
@@ -70,6 +77,22 @@ const CreateBot = () => {
             autoSize={{ minRows: 5, maxRows: 12 }}
             placeholder={t('promptNotice')} />
         </Form.Item>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            {t('botTag')}
+          </label>
+          <Select
+            value={tag}
+            onChange={setTag}
+            className="w-full"
+          >
+            {tagOptions.map(option => (
+              <Option key={option} value={option}>{option}</Option>
+            ))}
+          </Select>
+        </div>
+
         <Form.Item>
           <Button
             type="primary"

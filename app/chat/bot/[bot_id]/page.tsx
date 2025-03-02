@@ -122,6 +122,13 @@ const BotInfo = ({ params }: { params: { bot_id: string } }) => {
           <span className='text-gray-400 text-sm'>{t('noPrompt')}</span>
         }
       </div>
+      <div className="flex items-center mt-2">
+        {botInfo?.tag && (
+          <span className="inline-block bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full mr-2">
+            {botInfo.tag}
+          </span>
+        )}
+      </div>
     </div>
   )
 }

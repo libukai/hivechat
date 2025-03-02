@@ -6,7 +6,7 @@ import { Popconfirm } from 'antd';
 import { SettingOutlined, LogoutOutlined, RollbackOutlined, UserOutlined } from '@ant-design/icons';
 import clsx from 'clsx';
 import { usePathname } from 'next/navigation';
-import logo from "@/app/images/logo.png";
+import logo from "@/app/images/mulanhua.png";
 import Spark from "@/app/images/spark.svg";
 import { useSession, signOut } from 'next-auth/react';
 import SpinLoading from '@/app/components/loading/SpinLoading';
@@ -35,8 +35,7 @@ export default function RootLayout({
       <div className="flex flex-col w-64 bg-gray-100 min-h-screen h-screen p-4 box-border">
         <div className="flex items-center flex-row flex-grow-0 mb-2 h-10 mr-4">
           <Link href="/" className='flex items-center'>
-            <Image src={logo} className="ml-1" alt="HiveChat logo" width={24} height={24} />
-            <span className='text-xl ml-2'>Hivechat Admin</span>
+            <Image src={logo} className="ml-1" alt="HiveChat logo" width={248} height={24} />
           </Link>
         </div>
         <hr className='mb-4' />

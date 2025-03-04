@@ -244,7 +244,10 @@ const ChatList = () => {
           }
         </MenuSection>
 
-        <MenuSection title={t('myBots')} icon={<Spark width={20} height={20} alt='spark' />} defaultExpanded={false}>
+        <MenuSection
+          title={t('myBots')}
+          icon={<Spark width={20} height={20} alt='spark' />}
+          defaultExpanded={true}>
           <ul className="pr-4">
             <Link href={`/chat/bot/discover`}>
               <li

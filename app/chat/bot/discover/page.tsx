@@ -16,7 +16,7 @@ const BotDiscover = () => {
   const [activeTag, setActiveTag] = useState<string>('');
   
   // 预定义标签顺序，可以根据需要调整
-  const tagOrder = ["集团", "通用", "工作", "学习", "娱乐", "生活", "其他"];
+  const tagOrder = ["知音集团", "木兰花家政", "通用", "个人"];
   
   useEffect(() => {
     async function getBotsList() {

@@ -22,7 +22,7 @@ const CreateBot = () => {
   const { data: session } = useSession();
   const isAdmin = session?.user?.isAdmin;
   
-  const tagOptions = ['个人', '通用', '学习', '工作', '娱乐', '生活', '其他'];
+  const tagOptions = ["知音集团", "木兰花家政", "通用", "个人"];
   
   type FormValues = {
     avatar: string;
